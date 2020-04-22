@@ -1,28 +1,24 @@
 const express = require('express');
-const mysql = require('mysql');
 const path = require('path');
-const jwt = require('jsonwebtoken');
 const app = express();
-const bcrypt = require('bcryptjs');
+const cookieParser = require('cookie-parser');
+const dotenv = require('dotenv');
+
+dotenv.config({ path: './.env' });
+const db = require('./model/db');
 
 // Parse URL-encoded bodies (as sent by HTML forms)
 app.use(express.urlencoded({ extended: false }));
 // Parse JSON bodies (as sent by API clients)
 app.use(express.json());
+app.use(cookieParser());
 
 app.set('view engine', 'hbs');
 
 const publicDirectoryPath = path.join(__dirname, "../public");
 app.use(express.static(publicDirectoryPath));
 
-const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: '',
-  database: 'nodejs'
-});
-
-db.connect(function(err) {
+db.start.connect(function(err) {
   if(err) {
     console.log('Error connecting to the database');
   } else {
@@ -30,9 +26,9 @@ db.connect(function(err) {
   }
 });
 
-app.get('/', (req, res) => {
-  res.send('<h1>Home Page</h1>');
-});
+//Define Routes
+app.use('/', require('./routes/pages'));
+app.use('/auth', require('./routes/auth'));
 
 app.listen(5000, () => {
   console.log("listening on port 5000");
