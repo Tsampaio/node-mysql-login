@@ -16,4 +16,25 @@ router.get('/', authController.isLoggedIn, (req, res) => {
   });
 });
 
+router.get('/profile', authController.isLoggedIn, (req, res) => {
+  console.log("inside");
+  console.log(req.user);
+  if(req.user) {
+    res.render('profile', {
+      user: req.user
+    });
+  } else {
+    res.redirect("/login");
+  }
+  
+});
+
+router.get('/login', (req, res) => {
+  res.render('login');
+});
+
+router.get('/register', (req, res) => {
+  res.render('register');
+});
+
 module.exports = router;

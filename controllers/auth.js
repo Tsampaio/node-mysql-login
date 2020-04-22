@@ -127,46 +127,10 @@ exports.isLoggedIn = async (req, res, next) => {
   }
 };
 
-    
-
-    
-    
-    
-    
-    // if (user.length > 0) {
-    //     return res.send('<h1>That Email has been taken</h1>');
-    // }
-
-    // password = await bcrypt.hash(password, 8);
-            
-    //db.start.query('INSERT INTO users SET ?', { name: name, email: email, password: password });
-        
-
-    // if (user) {
-    //   return res.status(401).send({
-    //     status: 'fail',
-    //     message: 'That email already has been taken'
-    //   });
-    // }
-
-    // const newUser = await User.create({
-    //   name: name,
-    //   email: email,
-    //   password: password,
-    //   passwordConfirm: passwordConfirm
-    // });
-
-    // const url = `${req.protocol}://${req.get('host')}/dashboard`;
-    // Or http://localhost:3002/dashboard   for HOST
-    // console.log(url);
-    // await new Email(newUser, url).sendWelcome();
-
-    // res.status(200).json({
-    //   status: 'success',
-    //   message: 'You are Registered',
-    //   data: newUser
-    // });
-    
-    // createSendToken(newUser, 201, res);
-  
-
+exports.logout = (req, res) => {
+  res.cookie('jwt', 'loggedout', {
+    expires: new Date(Date.now() + 10 * 1000),
+    httpOnly: true
+  });
+  res.status(200).redirect("/");
+};
